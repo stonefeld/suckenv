@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source dwmconfig
+
+case $BUTTON in
+	1) ctrlpanel nm;;
+esac
+
+wifi=$(iwgetid -r)
+[ -z "$wifi" ] && wifi="Disconnected"
+
+# [ "$COLORED" = true ] && echo "| 📶 $wifi |" || echo " $(cl 'cy' '')󰤨^d^ $wifi |"
+# [ "$COLORED" = true ] && echo "| 📶 $wifi |" || echo " $(cl 'ma' '')󰤨 $wifi  "
+echo " $(cl 'bl' '')Wifi: $(cl 'wh' '')$wifi "

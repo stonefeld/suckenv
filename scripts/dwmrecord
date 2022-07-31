@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source dwmconfig
+
+case $BUTTON in
+	1) dmrecord;;
+	3) termlaunch -f -g 120x34 -e vifm $HOME/vids/recordings;;
+esac
+
+if [ "$COLORED" = true ]; then
+	[ -f /tmp/recordingpid ] && echo " 🎤 ⏺️ |"
+else
+    # [ -f /tmp/recordingpid ] && echo " $(cl 'or' '')󰝥 󰍬  "
+    [ -f /tmp/recordingpid ] && echo "$(cl 'bg' 're') Rec ^d^"
+fi
