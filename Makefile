@@ -1,7 +1,5 @@
 SCRIPTS_PATH=/usr/local/bin
 
-include config.mk
-
 install:
 	cd dwm && make clean install
 	cd dwmblocks && make clean install
@@ -20,3 +18,4 @@ uninstall:
 	rm -f /usr/local/bin/dmenu_run
 	rm -f /usr/local/bin/dmenu_path
 	rm -f $(SCRIPTS_PATH)/dwm*
+	rm -f $(SCRIPTS_PATH)/suckcolors

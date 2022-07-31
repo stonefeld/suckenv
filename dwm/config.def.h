@@ -33,9 +33,13 @@ static const Gap default_gap              = {.isgap = 1, .realgap = 10, .gappx =
 /* colors */
 #include "../themes/colors.h"
 static const char *colors[][3]      = {
-	/*               fg             bg             border   */
-	[SchemeNorm] = { dwm_norm_fg,   dwm_norm_bg,   dwm_norm_border },
-	[SchemeSel]  = { dwm_sel_fg,    dwm_sel_bg,    dwm_sel_border  },
+	/*                     fg                bg                 border   */
+	[SchemeNorm]       = { dwm_norm_fg,      dwm_norm_bg,       dwm_norm_border },
+	[SchemeSel]        = { dwm_sel_fg,       dwm_sel_bg,        dwm_sel_border  },
+	[SchemeStatNorm]   = { dwm_stat_nor,     dwm_norm_bg,       dwm_norm_border },
+	[SchemeStatAcc]    = { dwm_stat_acc_fg,  dwm_norm_bg,       dwm_norm_border },
+	[SchemeStatAccInv] = { dwm_norm_bg,      dwm_stat_acc_bg,   dwm_norm_border },
+	[SchemeStatUrg]    = { dwm_norm_bg,      dwm_stat_urg_bg,   dwm_norm_border },
 };
 
 /* tagging */

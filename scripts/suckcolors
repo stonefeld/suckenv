@@ -1,0 +1,22 @@
+#!/bin/bash
+
+[ -z "$SUCKENV_SRC" ] && SUCKENV_SRC=$HOME/.local/src/suckenv
+[ ! -d "$SUCKENV_SRC" ] && exit
+
+themes="$(find "$SUCKENV_SRC"/themes -maxdepth 1 -type f | sed '/colors.h/d; s/.h$//')"
+names=$(basename -a $themes)
+
+echo "Select theme:"
+sel=$(echo "$names" | fzf)
+[ -z "$sel" ] && exit
+
+echo "#include \"$sel.h\"" > "$SUCKENV_SRC"/themes/colors.h
+cd "$SUCKENV_SRC" && sudo make install &>/dev/null
+
+if [ "$?" -eq 0 ]; then
+	echo "Suckenv's theme changed to '$sel'"
+	echo "Restart 'dwm' to see the changes"
+else
+	echo "Suckenv's theme hasn't changed"
+	echo "An error has ocurred"
+fi

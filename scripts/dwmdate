@@ -8,4 +8,4 @@ esac
 
 # [ "$COLORED" = true ] && date "+ 📅 %a, %b %d (%Y) |" || date "+ $(cl 'or' '')󰃮^d^ %a, %b %d (%Y) |"
 # [ "$COLORED" = true ] && date "+ 📅 %a, %b %d (%Y) |" || date "+ $(cl 'ye' '')󰃮 %a, %b %d (%Y) |"
-date "+$(cl 'bg' 'cy') %a, %b %d (%Y) %H:%M "
+date "+^i^ %a, %b %d (%Y) %H:%M "

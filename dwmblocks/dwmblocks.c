@@ -1,11 +1,11 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
-#include<unistd.h>
-#include<signal.h>
-#include<sys/wait.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
 #ifndef NO_X
-#include<X11/Xlib.h>
+#include <X11/Xlib.h>
 #endif
 #ifdef __OpenBSD__
 #define SIGPLUS			SIGUSR1+1
@@ -49,7 +49,7 @@ static void (*writestatus) () = pstdout;
 #endif
 
 
-#include "blocks.h"
+#include "config.h"
 
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
@@ -76,7 +76,7 @@ void getcmd(const Block *block, char *output)
 	//only chop off newline if one is present at the end
 	i = output[i-1] == '\n' ? i-1 : i;
 	if (delim[0] != '\0') {
-		strncpy(output+i, delim, delimLen); 
+		strncpy(output+i, delim, delimLen);
 	}
 	else
 		output[i++] = '\0';
