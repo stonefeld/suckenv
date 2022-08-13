@@ -1,1 +1,1 @@
-#include "nord.h"
+#include "catppuccin.h"
