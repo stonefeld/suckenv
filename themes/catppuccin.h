@@ -17,5 +17,5 @@ static const char dwm_sel_bg[]      = "#313244";
 static const char dwm_sel_border[]  = "#89b4fa";
 static const char dwm_stat_nor[]    = "#cdd6f4";
 static const char dwm_stat_acc_fg[] = "#89b4fa";
-static const char dwm_stat_acc_bg[] = "#94e2d5";
+static const char dwm_stat_acc_bg[] = "#74c7ec";
 static const char dwm_stat_urg_bg[] = "#f38ba8";
