@@ -12,10 +12,8 @@ clean:
 	cd dmenu && make clean
 
 uninstall:
-	rm -f /usr/local/bin/dwm
-	rm -f /usr/local/bin/dwmblocks
-	rm -f /usr/local/bin/dmenu
-	rm -f /usr/local/bin/dmenu_run
-	rm -f /usr/local/bin/dmenu_path
+	cd dwm && make uninstall
+	cd dwmblocks && make uninstall
+	cd dmenu && make uninstall
 	rm -f $(SCRIPTS_PATH)/dwm*
 	rm -f $(SCRIPTS_PATH)/suckcolors
