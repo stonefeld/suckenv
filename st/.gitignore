@@ -1,0 +1,7 @@
+*.o
+*.rej
+*.orig
+*.bak
+st
+config.h
+.ccls-cache/

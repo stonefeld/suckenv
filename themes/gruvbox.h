@@ -19,3 +19,17 @@ static const char dwm_stat_nor[]    = "#a89984";
 static const char dwm_stat_acc_fg[] = "#689d6a";
 static const char dwm_stat_acc_bg[] = "#8ec07c";
 static const char dwm_stat_urg_bg[] = "#cc241d";
+
+/*************/
+/* ST COLORS */
+/*************/
+static const char *colorname[] = {
+	"#1d2021", "#fb4934", "#b8bb26", "#fabd2f",
+	"#83a598", "#d3869b", "#8ec07c", "#d5c4a1",
+
+	"#665c54", "#fb4934", "#b8bb26", "#fabd2f",
+	"#83a598", "#d3869b", "#8ec07c", "#fbf1c7",
+
+	[255] = 0,
+	"#1d2021", "#d5c4a1",
+};
