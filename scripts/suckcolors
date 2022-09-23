@@ -12,6 +12,7 @@ sel=$(echo "$names" | fzf)
 
 echo "Changing dwm colorscheme..."
 echo "Changing dmenu colorscheme..."
+echo "Changing st colorscheme..."
 echo "#include \"$sel.h\"" > "$SUCKENV_SRC"/themes/colors.h
 cd "$SUCKENV_SRC" && sudo make install &>/dev/null
 
