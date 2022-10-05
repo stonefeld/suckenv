@@ -57,7 +57,8 @@ static int statusContinue = 1;
 static int returnStatus = 0;
 
 //opens process *cmd and stores output in *output
-void getcmd(const Block *block, char *output)
+void
+getcmd(const Block *block, char *output)
 {
 	if (block->signal)
 		*output++ = block->signal;
@@ -83,7 +84,8 @@ void getcmd(const Block *block, char *output)
 	pclose(cmdf);
 }
 
-void getcmds(int time)
+void
+getcmds(int time)
 {
 	const Block* current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -93,7 +95,8 @@ void getcmds(int time)
 	}
 }
 
-void getsigcmds(unsigned int signal)
+void
+getsigcmds(unsigned int signal)
 {
 	const Block *current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -103,13 +106,14 @@ void getsigcmds(unsigned int signal)
 	}
 }
 
-void setupsignals()
+void
+setupsignals()
 {
 	struct sigaction sa = { .sa_sigaction = sighandler, .sa_flags = SA_SIGINFO };
 #ifndef __OpenBSD__
-	    /* initialize all real time signals with dummy handler */
-    for (int i = SIGRTMIN; i <= SIGRTMAX; i++) {
-        signal(i, dummysighandler);
+	/* initialize all real time signals with dummy handler */
+	for (int i = SIGRTMIN; i <= SIGRTMAX; i++) {
+		signal(i, dummysighandler);
 		sigaddset(&sa.sa_mask, i);
 	}
 #endif
@@ -121,7 +125,8 @@ void setupsignals()
 
 }
 
-int getstatus(char *str, char *last)
+int
+getstatus(char *str, char *last)
 {
 	strcpy(last, str);
 	str[0] = '\0';
@@ -132,7 +137,8 @@ int getstatus(char *str, char *last)
 }
 
 #ifndef NO_X
-void setroot()
+void
+setroot()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
 		return;
@@ -140,7 +146,8 @@ void setroot()
 	XFlush(dpy);
 }
 
-int setupX()
+int
+setupX()
 {
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
@@ -153,7 +160,8 @@ int setupX()
 }
 #endif
 
-void pstdout()
+void
+pstdout()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
 		return;
@@ -162,7 +170,8 @@ void pstdout()
 }
 
 
-void statusloop()
+void
+statusloop()
 {
 	setupsignals();
 	int i = 0;
@@ -178,13 +187,15 @@ void statusloop()
 
 #ifndef __OpenBSD__
 /* this signal handler should do nothing */
-void dummysighandler(int signum)
+void
+dummysighandler(int signum)
 {
-    return;
+	return;
 }
 #endif
 
-void sighandler(int signum, siginfo_t *si, void *ucontext)
+void
+sighandler(int signum, siginfo_t *si, void *ucontext)
 {
 	if (si->si_value.sival_int) {
 		pid_t parent = getpid();
@@ -212,17 +223,20 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 	}
 }
 
-void termhandler()
+void
+termhandler()
 {
 	statusContinue = 0;
 }
 
-void chldhandler()
+void
+chldhandler()
 {
 	while (0 < waitpid(-1, NULL, WNOHANG));
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
