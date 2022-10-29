@@ -2,9 +2,10 @@
 static const Block blocks[] = {
 	/* Icon    Command                              Update Interval   Update Signal */
 	// HIDDEN
-	{ "",    "dwmrecord",                           0,                7              },
+	{ "",    "dwmrecord",                           0,                8              },
 
 	// MISC.
+	{ "",    "dwmmail",                             0,                7              },
 	{ "",    "dwmupdates",                          0,                6              },
 
 	// INTERNET-STATUS
