@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "JetbrainsMono Nerd Font Mono:size=12:antialias=true:autohint=true";
+static char *font = "JetBrains Mono Nerd Font Mono:size=12:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -34,7 +34,7 @@ static float chscale = 1.0;
  *
  * More advanced example: L" `'\"()[]{}"
  */
-wchar_t *worddelimiters = L" ";
+wchar_t *worddelimiters = L" `'\"()[]{}";
 
 /* selection timeouts (in milliseconds) */
 static unsigned int doubleclicktimeout = 300;
@@ -160,16 +160,11 @@ static uint forcemousemod = ShiftMask;
  * Internal mouse shortcuts.
  * Beware that overloading Button1 will disable the selection.
  */
-static const int mousescrollincrement = 3;
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = mousescrollincrement}, 0, /* !alt */ -1 },
-	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = mousescrollincrement}, 0, /* !alt */ -1 },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
-	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
-	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
+	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = 3},		0, /* !alt */ -1 },
+	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = 3},		0, /* !alt */ -1 },
 };
 
 /* Internal keyboard shortcuts. */
@@ -182,19 +177,15 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
+	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
+	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ ControlMask,          XK_equal,       zoom,           {.f = +1} },
 	{ ControlMask,          XK_minus,       zoom,           {.f = -1} },
 	{ ControlMask,          XK_0,           zoomreset,      {.f =  0} },
-	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
-	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
-	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
-	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
-	{ TERMMOD,              XK_X,           invert,         { }       },
-	{ MODKEY,               XK_k,           kscrollup,      {.i = mousescrollincrement} },
-	{ MODKEY,               XK_j,           kscrolldown,    {.i = mousescrollincrement} },
-	{ MODKEY,               XK_u,           kscrollup,      {.i = -1} },
-	{ MODKEY,               XK_d,           kscrolldown,    {.i = -1} },
+	{ Mod1Mask,             XK_u,           kscrollup,      {.i = -1} },
+	{ Mod1Mask,             XK_d,           kscrolldown,    {.i = -1} },
+	{ Mod1Mask,             XK_k,           kscrollup,      {.i =  1} },
+	{ Mod1Mask,             XK_j,           kscrolldown,    {.i =  1} },
 };
 
 /*

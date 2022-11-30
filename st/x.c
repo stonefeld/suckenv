@@ -61,7 +61,8 @@ static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
 static void ttysend(const Arg *);
-static void invert(const Arg *);
+void kscrollup(const Arg *);
+void kscrolldown(const Arg *);
 
 /* config.h for applying patches and the configuration. */
 #include "config.h"
@@ -263,27 +264,7 @@ static char *opt_line  = NULL;
 static char *opt_name  = NULL;
 static char *opt_title = NULL;
 
-static int  invertcolors = 0;
 static uint buttons; /* bit field of pressed buttons */
-
-void
-invert(const Arg *dummy)
-{
-	invertcolors = !invertcolors;
-	redraw();
-}
-
-Color
-invertedcolor(Color *clr) {
-	XRenderColor rc;
-	Color inverted;
-	rc.red = ~clr->color.red;
-	rc.green = ~clr->color.green;
-	rc.blue = ~clr->color.blue;
-	rc.alpha = clr->color.alpha;
-	XftColorAllocValue(xw.dpy, xw.vis, xw.cmap, &rc, &inverted);
-	return inverted;
-}
 
 void
 clipcopy(const Arg *dummy)
@@ -900,11 +881,9 @@ xsetcolorname(int x, const char *name)
 void
 xclear(int x1, int y1, int x2, int y2)
 {
-	Color c;
-	c = dc.col[IS_SET(MODE_REVERSE)? defaultfg : defaultbg];
-	if (invertcolors)
-		c = invertedcolor(&c);
-	XftDrawRect(xw.draw, &c, x1, y1, x2-x1, y2-y1);
+	XftDrawRect(xw.draw,
+			&dc.col[IS_SET(MODE_REVERSE)? defaultfg : defaultbg],
+			x1, y1, x2-x1, y2-y1);
 }
 
 void
@@ -1303,6 +1282,8 @@ xinit(int cols, int rows)
 	xsel.xtarget = XInternAtom(xw.dpy, "UTF8_STRING", 0);
 	if (xsel.xtarget == None)
 		xsel.xtarget = XA_STRING;
+
+	boxdraw_xinit(xw.dpy, xw.cmap, xw.draw, xw.vis);
 }
 
 int
@@ -1349,8 +1330,13 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 			yp = winy + font->ascent;
 		}
 
-		/* Lookup character index with default font. */
-		glyphidx = XftCharIndex(xw.dpy, font->match, rune);
+		if (mode & ATTR_BOXDRAW) {
+			/* minor shoehorning: boxdraw uses only this ushort */
+			glyphidx = boxdrawindex(&glyphs[i]);
+		} else {
+			/* Lookup character index with default font. */
+			glyphidx = XftCharIndex(xw.dpy, font->match, rune);
+		}
 		if (glyphidx) {
 			specs[numspecs].font = font->match;
 			specs[numspecs].glyph = glyphidx;
@@ -1532,13 +1518,6 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	if (base.mode & ATTR_INVISIBLE)
 		fg = bg;
 
-	if (invertcolors) {
-		revfg = invertedcolor(fg);
-		revbg = invertedcolor(bg);
-		fg = &revfg;
-		bg = &revbg;
-	}
-
 	/* Intelligent cleaning up of the borders. */
 	if (x == 0) {
 		xclear(0, (y == 0)? 0 : winy, win.hborderpx,
@@ -1564,8 +1543,12 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	r.width = width;
 	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
 
-	/* Render the glyphs. */
-	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+	if (base.mode & ATTR_BOXDRAW) {
+		drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
+	} else {
+		/* Render the glyphs. */
+		XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+	}
 
 	/* Render underline and strikethrough. */
 	if (base.mode & ATTR_UNDERLINE) {
@@ -1611,7 +1594,7 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og, Line line, int le
 	/*
 	 * Select the right color for the right mode.
 	 */
-	g.mode &= ATTR_BOLD|ATTR_ITALIC|ATTR_UNDERLINE|ATTR_STRUCK|ATTR_WIDE;
+	g.mode &= ATTR_BOLD|ATTR_ITALIC|ATTR_UNDERLINE|ATTR_STRUCK|ATTR_WIDE|ATTR_BOXDRAW;
 
 	if (IS_SET(MODE_REVERSE)) {
 		g.mode |= ATTR_REVERSE;
@@ -1633,9 +1616,6 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og, Line line, int le
 		}
 		drawcol = dc.col[g.bg];
 	}
-
-	if (invertcolors)
-		drawcol = invertedcolor(&drawcol);
 
 	/* draw the new one */
 	if (IS_SET(MODE_FOCUSED)) {
@@ -1917,7 +1897,7 @@ void
 kpress(XEvent *ev)
 {
 	XKeyEvent *e = &ev->xkey;
-	KeySym ksym;
+	KeySym ksym = NoSymbol;
 	char buf[64], *customkey;
 	int len;
 	Rune c;
@@ -1933,10 +1913,13 @@ kpress(XEvent *ev)
 	if (IS_SET(MODE_KBDLOCK))
 		return;
 
-	if (xw.ime.xic)
+	if (xw.ime.xic) {
 		len = XmbLookupString(xw.ime.xic, e, buf, sizeof buf, &ksym, &status);
-	else
+		if (status == XBufferOverflow)
+			return;
+	} else {
 		len = XLookupString(e, buf, sizeof buf, &ksym, NULL);
+	}
 	/* 1. shortcuts */
 	for (bp = shortcuts; bp < shortcuts + LEN(shortcuts); bp++) {
 		if (ksym == bp->keysym && match(bp->mod, e->state)) {
