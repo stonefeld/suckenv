@@ -1,11 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx        = 2;        /* border pixel of windows */
+static const unsigned int borderpx        = 3;        /* border pixel of windows */
 static const unsigned int snap            = 8;        /* snap pixel */
 static const int showbar                  = 1;        /* 0 means no bar */
 static const int topbar                   = 1;        /* 0 means bottom bar */
-static const char *fonts[]                = { "FantasqueSansMono Nerd Font:style=Bold:pixelsize=16:antialias=true:autohint=true" };
+static const char *fonts[]                = {
+	"Fantasque Sans Mono:style=Bold:size=12:antialias=true:autohint=true",
+	"Material Design Icons:size=14:antialias=true:autohint=true",
+};
 
 /* dmenu */
 static const char dmenufont[]             = "monospace:size=12";
@@ -19,15 +22,16 @@ static const int systraypinningfailfirst  = 1;        /* 1: if pinning fails, di
 static const int showsystray              = 1;        /* 0 means no systray */
 
 /* statuspadding */
-static const int horizpadbar              = 10;       /* horizontal padding for statusbar */
-static const int vertpadbar               = 10;       /* vertical padding for statusbar */
-
-/* barpadding */
-static const int vertpad                  = 10;       /* vertical padding of bar */
-static const int sidepad                  = 10;       /* horizontal padding of bar */
+static const int horizpadbar              = 12;       /* horizontal padding for statusbar */
+static const int vertpadbar               = 12;       /* vertical padding for statusbar */
 
 /* fullgaps */
 static const Gap default_gap              = {.isgap = 1, .realgap = 10, .gappx = 10};
+
+static const unsigned int ulinepad        = 5;        /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke     = 3;        /* thickness / height of the underline */
+static const unsigned int ulinevoffset    = 0;        /* how far above the bottom of the bar the line should appear */
+static const int ulineall                 = 0;        /* 1 to show underline on all tags, 0 for just the active ones */
 
 /* colors */
 #include "../themes/colors.h"
@@ -35,14 +39,41 @@ static const char *colors[][3]      = {
 	/*                     fg                bg                 border   */
 	[SchemeNorm]       = { dwm_norm_fg,      dwm_norm_bg,       dwm_norm_border },
 	[SchemeSel]        = { dwm_sel_fg,       dwm_sel_bg,        dwm_sel_border  },
-	[SchemeStatNorm]   = { dwm_stat_nor,     dwm_norm_bg,       dwm_norm_border },
-	[SchemeStatAcc]    = { dwm_stat_acc_fg,  dwm_norm_bg,       dwm_norm_border },
-	[SchemeStatAccInv] = { dwm_norm_bg,      dwm_stat_acc_bg,   dwm_norm_border },
-	[SchemeStatUrg]    = { dwm_norm_bg,      dwm_stat_urg_bg,   dwm_norm_border },
+	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        dwm_yellow      },
+	[SchemeBgBlack]    = { dwm_norm_bg,      dwm_black,         dwm_norm_border },
+	[SchemeFgBlack]    = { dwm_black,        dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgRed]      = { dwm_norm_bg,      dwm_red,           dwm_norm_border },
+	[SchemeFgRed]      = { dwm_red,          dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgGreen]    = { dwm_norm_bg,      dwm_green,         dwm_norm_border },
+	[SchemeFgGreen]    = { dwm_green,        dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgYellow]   = { dwm_norm_bg,      dwm_yellow,        dwm_norm_border },
+	[SchemeFgYellow]   = { dwm_yellow,       dwm_norm_bg,       dwm_yellow      },
+	[SchemeBgBlue]     = { dwm_norm_bg,      dwm_blue,          dwm_norm_border },
+	[SchemeFgBlue]     = { dwm_blue,         dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgMagenta]  = { dwm_norm_bg,      dwm_magenta,       dwm_norm_border },
+	[SchemeFgMagenta]  = { dwm_magenta,      dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgCyan]     = { dwm_norm_bg,      dwm_cyan,          dwm_norm_border },
+	[SchemeFgCyan]     = { dwm_cyan,         dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgWhite]    = { dwm_norm_bg,      dwm_white,         dwm_norm_border },
+	[SchemeFgWhite]    = { dwm_white,        dwm_norm_bg,       dwm_norm_border },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+// static const char *tags[] = { " ", " ", " ", " ", " ", " ", " ", " ", " " };
+static const char *tags[] = { "󰆋", "󰆍", "󰆍", "󰆍", "󰉋", "󰇮", "󰆦", "󰊠", "󰖷" };
+
+static const char *tagsel[][2] = {
+	/* fg           bg */
+	{ dwm_blue,    dwm_norm_bg },
+	{ dwm_red,     dwm_norm_bg },
+	{ dwm_yellow,  dwm_norm_bg },
+	{ dwm_purple,  dwm_norm_bg },
+	{ dwm_magenta, dwm_norm_bg },
+	{ dwm_green,   dwm_norm_bg },
+	{ dwm_cyan,    dwm_norm_bg },
+	{ dwm_orange,  dwm_norm_bg },
+	{ dwm_violet,  dwm_norm_bg },
+};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -51,9 +82,7 @@ static const Rule rules[] = {
 	 */
 	/* class                  instance    title       tags mask     isfloating   monitor */
 	{ "Pavucontrol",          NULL,       NULL,       0,            1,           -1 },
-	{ "Galculator",           NULL,       NULL,       0,            1,           -1 },
 	{ "Pcmanfm",              NULL,       NULL,       0,            1,           -1 },
-	{ "Nemo",                 NULL,       NULL,       0,            1,           -1 },
 	{ "Floating",             NULL,       NULL,       0,            1,           -1 },
 	{ "MPlayer",              NULL,       NULL,       0,            1,           -1 },
 	{ "Sxiv",                 NULL,       NULL,       0,            1,           -1 },
@@ -117,7 +146,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,      togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_m,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
-	// { MODKEY,                       XK_s,      togglesticky,   {0} },
 
 	{ MODKEY|ShiftMask,             XK_w,      killclient,     {0} },
 	{ MODKEY,                       XK_q,      focusmon,       {.i = +1 } },
@@ -159,7 +187,6 @@ static Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
