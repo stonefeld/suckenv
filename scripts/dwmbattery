@@ -2,10 +2,10 @@
 
 icon="󰂃"
 char=$(cat /sys/class/power_supply/AC/online)
+per=$(cat /sys/class/power_supply/BAT0/capacity)
 if [ "$char" -eq 1 ]; then
 	icon="󰂄"
 else
-	per=$(cat /sys/class/power_supply/BAT0/capacity)
 	case ${per::-1} in
 		10) icon="󰁹";;
 		9)  icon="󰂂";;
