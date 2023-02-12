@@ -10,9 +10,6 @@ static const char *fonts[]                = {
 	"Material Design Icons:size=14:antialias=true:autohint=true",
 };
 
-/* dmenu */
-static const char dmenufont[]             = "monospace:size=12";
-
 /* systray */
 static const unsigned int systraypinning  = 0;        /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft   = 0;        /* 0: systray in the right corner, >0: systray on left of status text */
@@ -39,23 +36,23 @@ static const char *colors[][3]      = {
 	/*                     fg                bg                 border   */
 	[SchemeNorm]       = { dwm_norm_fg,      dwm_norm_bg,       dwm_norm_border },
 	[SchemeSel]        = { dwm_sel_fg,       dwm_sel_bg,        dwm_sel_border  },
-	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        dwm_yellow      },
-	[SchemeBgBlack]    = { dwm_norm_bg,      dwm_black,         dwm_norm_border },
-	[SchemeFgBlack]    = { dwm_black,        dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgRed]      = { dwm_norm_bg,      dwm_red,           dwm_norm_border },
-	[SchemeFgRed]      = { dwm_red,          dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgGreen]    = { dwm_norm_bg,      dwm_green,         dwm_norm_border },
-	[SchemeFgGreen]    = { dwm_green,        dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgYellow]   = { dwm_norm_bg,      dwm_yellow,        dwm_norm_border },
-	[SchemeFgYellow]   = { dwm_yellow,       dwm_norm_bg,       dwm_yellow      },
-	[SchemeBgBlue]     = { dwm_norm_bg,      dwm_blue,          dwm_norm_border },
-	[SchemeFgBlue]     = { dwm_blue,         dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgMagenta]  = { dwm_norm_bg,      dwm_magenta,       dwm_norm_border },
-	[SchemeFgMagenta]  = { dwm_magenta,      dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgCyan]     = { dwm_norm_bg,      dwm_cyan,          dwm_norm_border },
-	[SchemeFgCyan]     = { dwm_cyan,         dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgWhite]    = { dwm_norm_bg,      dwm_white,         dwm_norm_border },
-	[SchemeFgWhite]    = { dwm_white,        dwm_norm_bg,       dwm_norm_border },
+	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        suck_yellow     },
+	[SchemeBgBlack]    = { dwm_norm_bg,      suck_black,        dwm_norm_border },
+	[SchemeFgBlack]    = { suck_black,       dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgRed]      = { dwm_norm_bg,      suck_red,          dwm_norm_border },
+	[SchemeFgRed]      = { suck_red,         dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgGreen]    = { dwm_norm_bg,      suck_green,        dwm_norm_border },
+	[SchemeFgGreen]    = { suck_green,       dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgYellow]   = { dwm_norm_bg,      suck_yellow,       dwm_norm_border },
+	[SchemeFgYellow]   = { suck_yellow,      dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgBlue]     = { dwm_norm_bg,      suck_blue,         dwm_norm_border },
+	[SchemeFgBlue]     = { suck_blue,        dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgMagenta]  = { dwm_norm_bg,      suck_magenta,      dwm_norm_border },
+	[SchemeFgMagenta]  = { suck_magenta,     dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgCyan]     = { dwm_norm_bg,      suck_cyan,         dwm_norm_border },
+	[SchemeFgCyan]     = { suck_cyan,        dwm_norm_bg,       dwm_norm_border },
+	[SchemeBgWhite]    = { dwm_norm_bg,      suck_white,        dwm_norm_border },
+	[SchemeFgWhite]    = { suck_white,       dwm_norm_bg,       dwm_norm_border },
 };
 
 /* tagging */
@@ -64,15 +61,15 @@ static const char *tags[] = { "󰆋", "󰆍", "󰆍", "󰆍", "󰉋", "󰇮", "�
 
 static const char *tagsel[][2] = {
 	/* fg           bg */
-	{ dwm_blue,    dwm_norm_bg },
-	{ dwm_red,     dwm_norm_bg },
-	{ dwm_yellow,  dwm_norm_bg },
-	{ dwm_purple,  dwm_norm_bg },
-	{ dwm_magenta, dwm_norm_bg },
-	{ dwm_green,   dwm_norm_bg },
-	{ dwm_cyan,    dwm_norm_bg },
-	{ dwm_orange,  dwm_norm_bg },
-	{ dwm_violet,  dwm_norm_bg },
+	{ suck_blue,    dwm_norm_bg },
+	{ suck_red,     dwm_norm_bg },
+	{ suck_yellow,  dwm_norm_bg },
+	{ suck_purple,  dwm_norm_bg },
+	{ suck_magenta, dwm_norm_bg },
+	{ suck_green,   dwm_norm_bg },
+	{ suck_cyan,    dwm_norm_bg },
+	{ suck_orange,  dwm_norm_bg },
+	{ suck_violet,  dwm_norm_bg },
 };
 
 static const Rule rules[] = {
@@ -118,7 +115,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", dmenu_norm_bg, "-nf", dmenu_norm_fg, "-sb", dmenu_sel_bg, "-sf", dmenu_sel_fg, "-i", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon };
 static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
@@ -126,7 +123,7 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	// { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
