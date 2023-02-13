@@ -25,6 +25,7 @@ static const int vertpadbar               = 12;       /* vertical padding for st
 /* fullgaps */
 static const Gap default_gap              = {.isgap = 1, .realgap = 10, .gappx = 10};
 
+/* underline */
 static const unsigned int ulinepad        = 5;        /* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke     = 3;        /* thickness / height of the underline */
 static const unsigned int ulinevoffset    = 0;        /* how far above the bottom of the bar the line should appear */
@@ -36,7 +37,7 @@ static const char *colors[][3]      = {
 	/*                     fg                bg                 border   */
 	[SchemeNorm]       = { dwm_norm_fg,      dwm_norm_bg,       dwm_norm_border },
 	[SchemeSel]        = { dwm_sel_fg,       dwm_sel_bg,        dwm_sel_border  },
-	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        suck_yellow     },
+	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        suck_violet     },
 	[SchemeBgBlack]    = { dwm_norm_bg,      suck_black,        dwm_norm_border },
 	[SchemeFgBlack]    = { suck_black,       dwm_norm_bg,       dwm_norm_border },
 	[SchemeBgRed]      = { dwm_norm_bg,      suck_red,          dwm_norm_border },
@@ -56,7 +57,6 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-// static const char *tags[] = { " ", " ", " ", " ", " ", " ", " ", " ", " " };
 static const char *tags[] = { "󰆋", "󰆍", "󰆍", "󰆍", "󰉋", "󰇮", "󰆦", "󰊠", "󰖷" };
 
 static const char *tagsel[][2] = {
