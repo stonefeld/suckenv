@@ -76,7 +76,7 @@
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum {
-	SchemeNorm, SchemeSel, SchemeFloat,
+	SchemeNorm, SchemeSel,
 	SchemeBgBlack, SchemeFgBlack,
 	SchemeBgRed, SchemeFgRed,
 	SchemeBgGreen, SchemeFgGreen,
@@ -897,9 +897,7 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 	ret = m->ww - w;
 	x = m->ww - w - getsystraywidth();
 
-	drw_setscheme(drw, scheme[LENGTH(colors)]);
-	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
-	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
+	drw_setscheme(drw, scheme[SchemeNorm]);
 	drw_rect(drw, x, 0, w, bh, 1, 1);
 	x++;
 
@@ -917,25 +915,25 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 			while (text[++i] != '^') {
 				if (text[i] == 'f') {
 					switch (text[++i]) {
-						case 'b': drw_setscheme(drw, scheme[SchemeFgBlack]); break;
-						case 'r': drw_setscheme(drw, scheme[SchemeFgRed]); break;
-						case 'g': drw_setscheme(drw, scheme[SchemeFgGreen]); break;
-						case 'y': drw_setscheme(drw, scheme[SchemeFgYellow]); break;
-						case 'l': drw_setscheme(drw, scheme[SchemeFgBlue]); break;
+						case 'b': drw_setscheme(drw, scheme[SchemeFgBlack]);   break;
+						case 'r': drw_setscheme(drw, scheme[SchemeFgRed]);     break;
+						case 'g': drw_setscheme(drw, scheme[SchemeFgGreen]);   break;
+						case 'y': drw_setscheme(drw, scheme[SchemeFgYellow]);  break;
+						case 'l': drw_setscheme(drw, scheme[SchemeFgBlue]);    break;
 						case 'm': drw_setscheme(drw, scheme[SchemeFgMagenta]); break;
-						case 'c': drw_setscheme(drw, scheme[SchemeFgCyan]); break;
-						case 'w': drw_setscheme(drw, scheme[SchemeFgWhite]); break;
+						case 'c': drw_setscheme(drw, scheme[SchemeFgCyan]);    break;
+						case 'w': drw_setscheme(drw, scheme[SchemeFgWhite]);   break;
 					}
 				} else if (text[i] == 'b') {
 					switch (text[++i]) {
-						case 'b': drw_setscheme(drw, scheme[SchemeBgBlack]); break;
-						case 'r': drw_setscheme(drw, scheme[SchemeBgRed]); break;
-						case 'g': drw_setscheme(drw, scheme[SchemeBgGreen]); break;
-						case 'y': drw_setscheme(drw, scheme[SchemeBgYellow]); break;
-						case 'l': drw_setscheme(drw, scheme[SchemeBgBlue]); break;
+						case 'b': drw_setscheme(drw, scheme[SchemeBgBlack]);   break;
+						case 'r': drw_setscheme(drw, scheme[SchemeBgRed]);     break;
+						case 'g': drw_setscheme(drw, scheme[SchemeBgGreen]);   break;
+						case 'y': drw_setscheme(drw, scheme[SchemeBgYellow]);  break;
+						case 'l': drw_setscheme(drw, scheme[SchemeBgBlue]);    break;
 						case 'm': drw_setscheme(drw, scheme[SchemeBgMagenta]); break;
-						case 'c': drw_setscheme(drw, scheme[SchemeBgCyan]); break;
-						case 'w': drw_setscheme(drw, scheme[SchemeBgWhite]); break;
+						case 'c': drw_setscheme(drw, scheme[SchemeBgCyan]);    break;
+						case 'w': drw_setscheme(drw, scheme[SchemeBgWhite]);   break;
 					}
 				}
 			}
@@ -1059,7 +1057,7 @@ focus(Client *c)
 		attachstack(c);
 		grabbuttons(c, 1);
 		if (c->isfloating && !c->isfullscreen)
-			XSetWindowBorder(dpy, c->win, scheme[SchemeFloat][ColBorder].pixel);
+			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
 		else
 			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		setfocus(c);
@@ -1375,7 +1373,7 @@ manage(Window w, XWindowAttributes *wa)
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
 	if (c->isfloating && !c->isfullscreen)
-		XSetWindowBorder(dpy, w, scheme[SchemeFloat][ColBorder].pixel);
+		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
 	else
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	configure(c); /* propagates border_width, if size doesn't change */
@@ -1526,7 +1524,8 @@ movemouse(const Arg *arg)
 }
 
 void
-moveresize(const Arg *arg) {
+moveresize(const Arg *arg)
+{
 	/* only floating windows can be moved */
 	Client *c;
 	c = selmon->sel;
@@ -1595,7 +1594,8 @@ moveresize(const Arg *arg) {
 }
 
 void
-moveresizeedge(const Arg *arg) {
+moveresizeedge(const Arg *arg)
+{
 	/* move or resize floating window to edge of screen */
 	Client *c;
 	c = selmon->sel;
@@ -1713,7 +1713,7 @@ propertynotify(XEvent *e)
 		updatesystray();
 	}
 
-    if ((ev->window == root) && (ev->atom == XA_WM_NAME))
+	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
 		updatestatus();
 	else if (ev->state == PropertyDelete)
 		return; /* ignore */
@@ -2130,12 +2130,12 @@ setup(void)
 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
 	wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
-   netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
+	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	netatom[NetSystemTray] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_S0", False);
 	netatom[NetSystemTrayOP] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_OPCODE", False);
 	netatom[NetSystemTrayOrientation] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_ORIENTATION", False);
 	netatom[NetSystemTrayOrientationHorz] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_ORIENTATION_HORZ", False);
-    netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
+	netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
@@ -2145,7 +2145,7 @@ setup(void)
 	xatom[Manager] = XInternAtom(dpy, "MANAGER", False);
 	xatom[Xembed] = XInternAtom(dpy, "_XEMBED", False);
 	xatom[XembedInfo] = XInternAtom(dpy, "_XEMBED_INFO", False);
-    /* init cursors */
+	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
@@ -2155,7 +2155,7 @@ setup(void)
 	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], 3);
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		scheme[i] = drw_scm_create(drw, colors[i], 4);
 	tagscheme = ecalloc(LENGTH(tagsel), sizeof(Clr *));
 	for (i = 0; i < LENGTH(tagsel); i++)
 		tagscheme[i] = drw_scm_create(drw, tagsel[i], 2);
@@ -2322,7 +2322,7 @@ togglefloating(const Arg *arg)
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
 	if (selmon->sel->isfloating && !selmon->sel->isfullscreen) {
-		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeFloat][ColBorder].pixel);
+		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColFloat].pixel);
 		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
 			selmon->sel->w, selmon->sel->h, 0);
 	} else {
@@ -2334,8 +2334,8 @@ togglefloating(const Arg *arg)
 void
 togglefullscr(const Arg *arg)
 {
-  if (selmon->sel)
-    setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+	if (selmon->sel)
+		setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
 }
 
 void

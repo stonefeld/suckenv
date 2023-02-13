@@ -33,32 +33,32 @@ static const int ulineall                 = 0;        /* 1 to show underline on 
 
 /* colors */
 #include "../themes/colors.h"
-static const char *colors[][3]      = {
-	/*                     fg                bg                 border   */
-	[SchemeNorm]       = { dwm_norm_fg,      dwm_norm_bg,       dwm_norm_border },
-	[SchemeSel]        = { dwm_sel_fg,       dwm_sel_bg,        dwm_sel_border  },
-	[SchemeFloat]      = { dwm_sel_fg,       dwm_sel_bg,        suck_violet     },
-	[SchemeBgBlack]    = { dwm_norm_bg,      suck_black,        dwm_norm_border },
-	[SchemeFgBlack]    = { suck_black,       dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgRed]      = { dwm_norm_bg,      suck_red,          dwm_norm_border },
-	[SchemeFgRed]      = { suck_red,         dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgGreen]    = { dwm_norm_bg,      suck_green,        dwm_norm_border },
-	[SchemeFgGreen]    = { suck_green,       dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgYellow]   = { dwm_norm_bg,      suck_yellow,       dwm_norm_border },
-	[SchemeFgYellow]   = { suck_yellow,      dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgBlue]     = { dwm_norm_bg,      suck_blue,         dwm_norm_border },
-	[SchemeFgBlue]     = { suck_blue,        dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgMagenta]  = { dwm_norm_bg,      suck_magenta,      dwm_norm_border },
-	[SchemeFgMagenta]  = { suck_magenta,     dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgCyan]     = { dwm_norm_bg,      suck_cyan,         dwm_norm_border },
-	[SchemeFgCyan]     = { suck_cyan,        dwm_norm_bg,       dwm_norm_border },
-	[SchemeBgWhite]    = { dwm_norm_bg,      suck_white,        dwm_norm_border },
-	[SchemeFgWhite]    = { suck_white,       dwm_norm_bg,       dwm_norm_border },
+static const char *colors[][4]      = {
+	/*                    fg            bg            border           float           */
+	[SchemeNorm]      = { dwm_norm_fg,  dwm_norm_bg,  dwm_norm_border, dwm_norm_border },
+	[SchemeSel]       = { dwm_sel_fg,   dwm_sel_bg,   dwm_sel_border,  suck_violet     },
+	[SchemeBgBlack]   = { dwm_norm_bg,  suck_black,   NULL,            NULL,           },
+	[SchemeFgBlack]   = { suck_black,   dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgRed]     = { dwm_norm_bg,  suck_red,     NULL,            NULL,           },
+	[SchemeFgRed]     = { suck_red,     dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgGreen]   = { dwm_norm_bg,  suck_green,   NULL,            NULL,           },
+	[SchemeFgGreen]   = { suck_green,   dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgYellow]  = { dwm_norm_bg,  suck_yellow,  NULL,            NULL,           },
+	[SchemeFgYellow]  = { suck_yellow,  dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgBlue]    = { dwm_norm_bg,  suck_blue,    NULL,            NULL,           },
+	[SchemeFgBlue]    = { suck_blue,    dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgMagenta] = { dwm_norm_bg,  suck_magenta, NULL,            NULL,           },
+	[SchemeFgMagenta] = { suck_magenta, dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgCyan]    = { dwm_norm_bg,  suck_cyan,    NULL,            NULL,           },
+	[SchemeFgCyan]    = { suck_cyan,    dwm_norm_bg,  NULL,            NULL,           },
+	[SchemeBgWhite]   = { dwm_norm_bg,  suck_white,   NULL,            NULL,           },
+	[SchemeFgWhite]   = { suck_white,   dwm_norm_bg,  NULL,            NULL,           },
 };
 
 /* tagging */
 static const char *tags[] = { "󰆋", "󰆍", "󰆍", "󰆍", "󰉋", "󰇮", "󰆦", "󰊠", "󰖷" };
 
+/* tag colors */
 static const char *tagsel[][2] = {
 	/* fg           bg */
 	{ suck_blue,    dwm_norm_bg },
