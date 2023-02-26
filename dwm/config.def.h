@@ -22,8 +22,8 @@ static const int showsystray              = 1;        /* 0 means no systray */
 static const int horizpadbar              = 12;       /* horizontal padding for statusbar */
 static const int vertpadbar               = 12;       /* vertical padding for statusbar */
 
-/* fullgaps */
-static const Gap default_gap              = {.isgap = 1, .realgap = 10, .gappx = 10};
+/* uselessgaps */
+static const unsigned int gappx           = 10;       /* gaps between windows */
 
 /* underline */
 static const unsigned int ulinepad        = 5;        /* horizontal padding between the underline and tag */
@@ -147,11 +147,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_w,      killclient,     {0} },
 	{ MODKEY,                       XK_q,      focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_q,      tagmon,         {.i = +1 } },
-
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 
 	{ MODKEY|ControlMask,           XK_j,      moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ MODKEY|ControlMask,           XK_k,      moveresize,     {.v = "0x -25y 0w 0h" } },
