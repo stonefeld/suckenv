@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx        = 3;        /* border pixel of windows */
+static const unsigned int borderpx        = 2;        /* border pixel of windows */
 static const unsigned int snap            = 8;        /* snap pixel */
 static const int showbar                  = 1;        /* 0 means no bar */
 static const int topbar                   = 1;        /* 0 means bottom bar */
@@ -77,14 +77,14 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class                  instance    title       tags mask     isfloating   monitor */
-	{ "Pavucontrol",          NULL,       NULL,       0,            1,           -1 },
-	{ "Pcmanfm",              NULL,       NULL,       0,            1,           -1 },
-	{ "Floating",             NULL,       NULL,       0,            1,           -1 },
-	{ "MPlayer",              NULL,       NULL,       0,            1,           -1 },
-	{ "Sxiv",                 NULL,       NULL,       0,            1,           -1 },
-	{ "Pinentry-gtk-2",       NULL,       NULL,       0,            1,           -1 },
-	{ "Nm-connection-editor", NULL,       NULL,       0,            1,           -1 },
+	/* class                  instance      title       tags mask     isfloating   monitor */
+	{ "Floating",             NULL,         NULL,       0,            1,           -1 },
+	{ "MPlayer",              NULL,         NULL,       0,            1,           -1 },
+	{ "Nm-connection-editor", NULL,         NULL,       0,            1,           -1 },
+	{ "Pavucontrol",          NULL,         NULL,       0,            1,           -1 },
+	{ "Pcmanfm",              NULL,         NULL,       0,            1,           -1 },
+	{ "Pinentry-gtk-2",       NULL,         NULL,       0,            1,           -1 },
+	{ NULL,                   "Msgcompose", NULL,       0,            1,           -1 },
 };
 
 /* layout(s) */
