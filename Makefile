@@ -1,10 +1,25 @@
 SCRIPTS_PATH=/usr/local/bin
 
-install:
+.PHONY: dwm dwmblocks dmenu dmenu-minimal st scripts
+
+install: dwm dwmblocks dmenu st scripts
+
+dwm:
 	cd dwm && make clean install
+
+dwmblocks:
 	cd dwmblocks && make clean install
+
+dmenu:
 	cd dmenu && make clean install
+
+dmenu-minimal:
+	cd dmenu-minimal && make clean install
+
+st:
 	cd st && make clean install
+
+scripts:
 	cp scripts/* $(SCRIPTS_PATH)
 
 clean:
