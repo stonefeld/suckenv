@@ -6,6 +6,7 @@ install: dwm dwmblocks dmenu st scripts
 
 dwm:
 	cd dwm && make clean install
+	cp dwm/dwm.desktop /usr/share/xsessions
 
 dwmblocks:
 	cd dwmblocks && make clean install
